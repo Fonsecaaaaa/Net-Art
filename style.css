@@ -1,0 +1,113 @@
+:root {
+    --bg-color: #121212;
+    --text-color: #ffffff;
+    --brazil-green: #009c3b;
+    --brazil-yellow: #ffdf00;
+    --brazil-blue: #002776;
+}
+
+body, html {
+    margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Courier New', Courier, monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: background-color 0.5s ease;
+}
+
+.screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 90%;
+    max-width: 500px;
+}
+
+.active { 
+    display: flex; 
+    animation: fadeIn 0.5s ease-in; 
+}
+
+@keyframes fadeIn { 
+    from { opacity: 0; } 
+    to { opacity: 1; } 
+}
+
+input[type="text"] {
+    width: 100%; padding: 15px 10px; margin: 15px 0; /* Mais padding para facilitar o toque */
+    background: #222; border: 1px solid #555; color: white;
+    border-radius: 5px; outline: none; font-size: 1rem;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 15px 30px; font-size: 1.2rem; font-weight: bold;
+    background: var(--text-color); color: var(--bg-color);
+    border: none; border-radius: 8px; cursor: pointer;
+    transition: transform 0.1s, background 0.3s;
+    text-transform: uppercase; margin-top: 20px;
+    
+    /* Prevenção de bugs no celular durante cliques rápidos */
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation; /* Bloqueia o double-tap zoom do iOS/Android */
+}
+
+button:active { transform: scale(0.95); }
+button:hover { background: var(--brazil-yellow); }
+
+.smash-btn {
+    font-size: 1.5rem; 
+    padding: 20px 40px;
+    width: 100%; /* Botão maior na etapa 3 para celular */
+}
+
+.progress-container {
+    width: 100%; height: 30px; background: #333;
+    border-radius: 15px; margin: 20px 0; overflow: hidden;
+    border: 2px solid #555;
+}
+
+.progress-bar {
+    height: 100%; width: 50%;
+    background: var(--brazil-green);
+    transition: width 0.1s;
+}
+
+input[type=range] { 
+    width: 100%; 
+    margin: 30px 0; 
+    height: 40px; /* Mais alto para facilitar o arraste no touch */
+}
+
+#static-noise { 
+    font-size: 2rem; 
+    letter-spacing: 5px; 
+    opacity: 0.5; 
+}
+
+#net-art {
+    font-size: 4rem; font-weight: 900; text-align: center;
+    text-transform: uppercase; display: none;
+    text-shadow: 4px 4px 0px var(--brazil-blue), -4px -4px 0px var(--brazil-green);
+    animation: pulseColor 2s infinite alternate;
+}
+
+@keyframes pulseColor {
+    0% { color: var(--brazil-yellow); transform: scale(1); }
+    100% { color: #fff; transform: scale(1.1); }
+}
+
+/* Ajustes para telas bem pequenas (Smartphones menores) */
+@media (max-width: 480px) {
+    #net-art { font-size: 2.8rem; }
+    h2 { font-size: 1.5rem; }
+    p { font-size: 0.95rem; }
+    #static-noise { font-size: 1.5rem; }
+}
