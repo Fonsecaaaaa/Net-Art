@@ -4,18 +4,33 @@ let timeAtMax = 0;
 let stage1Interval;
 let audio = document.getElementById('bg-audio');
 
+// Link de música padrão (livre de direitos autorais) para garantir que funcione
+const defaultMusic = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+
 function startStage1() {
-    const url = document.getElementById('audio-url').value;
-    if (url) {
-        audio.src = url;
-        audio.volume = 0.5;
-        // Tenta rodar o áudio (navegadores mobile exigem interação antes)
-        audio.play().catch(e => console.log("Erro de autoplay ou CORS no áudio."));
+    let url = document.getElementById('audio-url').value;
+    
+    // Se o usuário não colocar nada, usa a música padrão
+    if (!url) {
+        url = defaultMusic;
     }
+
+    audio.src = url;
+    audio.volume = 0.5;
+    
+    // Tenta forçar o play imediatamente após a interação do usuário
+    let playPromise = audio.play();
+    if (playPromise !== undefined) {
+        playPromise.catch(error => {
+            console.log("O navegador bloqueou o áudio ou o link é inválido:", error);
+        });
+    }
+
     switchScreen('screen-intro', 'screen-stage1');
     
     stage1Interval = setInterval(() => {
-        volume -= 2; 
+        // BALANCEAMENTO: Cai mais devagar (1 em vez de 2)
+        volume -= 1; 
         if (volume < 0) volume = 0;
         
         if (volume >= 100) {
@@ -37,7 +52,8 @@ function startStage1() {
 }
 
 function pumpVolume() { 
-    volume += 15; 
+    // BALANCEAMENTO: Enche mais rápido a cada toque (25 em vez de 15)
+    volume += 25; 
 }
 
 // --- ETAPA 2 LÓGICA ---
@@ -51,7 +67,6 @@ function tuneFrequency() {
     const noise = document.getElementById('static-noise');
     const status = document.getElementById('tuner-status');
     
-    // Frequência correta entre 70 e 76
     if (val >= 70 && val <= 76) {
         noise.innerText = "⭐ ⭐ ⭐ ⭐ ⭐";
         noise.style.color = "var(--brazil-yellow)";
@@ -87,7 +102,7 @@ function startStage3() {
 }
 
 function addEnergy() {
-    energy += 8;
+    energy += 12; // Enche mais rápido para garantir que funcione bem no mobile
     if (energy >= 100) {
         energy = 100;
         clearInterval(stage3Interval);
@@ -103,7 +118,11 @@ function startFinalStage() {
     
     let trumpet = document.getElementById('trumpet-audio');
     trumpet.volume = 1.0;
-    trumpet.play().catch(e => console.log("Erro ao reproduzir trombeta."));
+    
+    let playPromise = trumpet.play();
+    if (playPromise !== undefined) {
+        playPromise.catch(e => console.log("Erro ao reproduzir trombeta."));
+    }
 
     setTimeout(() => {
         document.getElementById('congrats-text').style.display = 'none';
