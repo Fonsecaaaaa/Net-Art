@@ -4,13 +4,12 @@ let timeAtMax = 0;
 let stage1Interval;
 let audio = document.getElementById('bg-audio');
 
-// Link de música padrão (livre de direitos autorais) para garantir que funcione
+// Música padrão caso o usuário não envie URL ou a URL falhe
 const defaultMusic = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
 
 function startStage1() {
     let url = document.getElementById('audio-url').value;
     
-    // Se o usuário não colocar nada, usa a música padrão
     if (!url) {
         url = defaultMusic;
     }
@@ -18,7 +17,6 @@ function startStage1() {
     audio.src = url;
     audio.volume = 0.5;
     
-    // Tenta forçar o play imediatamente após a interação do usuário
     let playPromise = audio.play();
     if (playPromise !== undefined) {
         playPromise.catch(error => {
@@ -29,20 +27,22 @@ function startStage1() {
     switchScreen('screen-intro', 'screen-stage1');
     
     stage1Interval = setInterval(() => {
-        // BALANCEAMENTO: Cai mais devagar (1 em vez de 2)
-        volume -= 1; 
+        volume -= 2; // Cai a cada 100ms
         if (volume < 0) volume = 0;
         
-        if (volume >= 100) {
-            volume = 100;
+        // CORREÇÃO MÁGICA: Zona Segura (acima de 90% já conta como "máximo")
+        if (volume >= 90) {
             timeAtMax += 0.1; 
         } else {
-            timeAtMax = 0; 
+            timeAtMax = 0; // Só zera se cair abaixo de 90
         }
 
-        document.getElementById('volume-bar').style.width = volume + '%';
+        // Trava visualmente no 100% para não bugar a barra
+        let displayVolume = volume > 100 ? 100 : volume;
+
+        document.getElementById('volume-bar').style.width = displayVolume + '%';
         document.getElementById('timer-stage1').innerText = `Segurando o máximo: ${timeAtMax.toFixed(1)}s`;
-        if (audio.src) audio.volume = volume / 100;
+        if (audio.src) audio.volume = displayVolume / 100;
 
         if (timeAtMax >= 5) {
             clearInterval(stage1Interval);
@@ -52,8 +52,7 @@ function startStage1() {
 }
 
 function pumpVolume() { 
-    // BALANCEAMENTO: Enche mais rápido a cada toque (25 em vez de 15)
-    volume += 25; 
+    volume += 25; // Enche bem a cada clique
 }
 
 // --- ETAPA 2 LÓGICA ---
@@ -95,14 +94,14 @@ function startStage3() {
     switchScreen('screen-stage2', 'screen-stage3');
     
     stage3Interval = setInterval(() => {
-        energy -= 3; 
+        energy -= 2; // Esvazia um pouco mais devagar para dar chance no celular
         if (energy < 0) energy = 0;
         document.getElementById('energy-bar').style.width = energy + '%';
     }, 100);
 }
 
 function addEnergy() {
-    energy += 12; // Enche mais rápido para garantir que funcione bem no mobile
+    energy += 15; // Ganha mais energia por clique
     if (energy >= 100) {
         energy = 100;
         clearInterval(stage3Interval);
