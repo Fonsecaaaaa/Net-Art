@@ -2,24 +2,21 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <!-- Ajuste crucial para mobile: impede zoom no clique rápido -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Projeto HEXA - Net Art</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- TELA INICIAL -->
     <div id="screen-intro" class="screen active">
         <h2>Desbloqueie a Net Art</h2>
-        <p>Insira o URL de uma música (em mp3) para começar, ou jogue em silêncio.</p>
+        <p>Insira o URL de uma música (em mp3) para começar, ou jogue com a música padrão.</p>
         <input type="text" id="audio-url" placeholder="Ex: https://site.com/musica.mp3">
         <button onclick="startStage1()">Iniciar Desafio</button>
         <audio id="bg-audio" loop></audio>
         <audio id="trumpet-audio" src="https://www.myinstants.com/media/sounds/trumpet-fanfare.mp3"></audio>
     </div>
 
-    <!-- ETAPA 1: BOMBA DE VOLUME -->
     <div id="screen-stage1" class="screen">
         <h2>Fase 1: Mantenha a Pressão</h2>
         <p>Toque na bomba para manter a barra no MÁXIMO por 5 segundos.</p>
@@ -27,11 +24,9 @@
             <div id="volume-bar" class="progress-bar"></div>
         </div>
         <p id="timer-stage1">Segurando o máximo: 0.0s</p>
-
-        <button onpointerdown="addEnergy()" class="action-btn smash-btn">VAI BRASIL!</button>
+        <button onpointerdown="pumpVolume()" class="action-btn">💣 BOMBA DE AR</button>
     </div>
 
-    <!-- ETAPA 2: SINTONIA -->
     <div id="screen-stage2" class="screen">
         <h2>Fase 2: Sintonize o Penta</h2>
         <p>Deslize a barra para achar a frequência exata e segure.</p>
@@ -40,17 +35,15 @@
         <p id="tuner-status">Buscando sinal...</p>
     </div>
 
-    <!-- ETAPA 3: ENERGIA DA TORCIDA -->
     <div id="screen-stage3" class="screen">
         <h2>Fase 3: Energia Final</h2>
         <p>Toque no botão O MAIS RÁPIDO QUE PUDER para encher a barra!</p>
         <div class="progress-container">
             <div id="energy-bar" class="progress-bar" style="background: var(--brazil-yellow); width: 0%;"></div>
         </div>
-        <button onclick="addEnergy()" class="action-btn smash-btn">VAI BRASIL!</button>
+        <button onpointerdown="addEnergy()" class="action-btn smash-btn">VAI BRASIL!</button>
     </div>
 
-    <!-- ETAPA FINAL: NET ART -->
     <div id="screen-final" class="screen">
         <h2 id="congrats-text">PARABÉNS!</h2>
         <div id="net-art">Brasil<br>Hexa<br>2026</div>
